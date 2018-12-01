@@ -55,6 +55,6 @@ class WebFeed:
 
 
 
-WebFeed.get_feed_single_image()
+# WebFeed.get_feed_single_image()
 # WebFeed.get_feed_constant()
 # WebFeed.get_feed()

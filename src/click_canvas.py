@@ -11,7 +11,7 @@ class MainWindow:
         self.canvas.bind("<Key>", MainWindow.key)
         self.canvas.bind("<Button-1>", MainWindow.callback)
         self.canvas.pack(expand=YES)
-        self.canvas.create_image(image=WebFeed.get_feed_single_image(), anchor=NW)
+        # self.canvas.create_image(image=WebFeed.get_feed_single_image(), anchor=NW)
 
     @staticmethod
     def key(event):
