@@ -27,6 +27,7 @@ class WebFeed:
             img_array = np.array(bytearray(img_response.content), dtype=np.uint8)
             if img_array is not None:
                 img = cv2.imdecode(img_array, -1)
+                return img
                 cv2.imshow("Invisy", img)
 
             if cv2.waitKey(1) == 27:

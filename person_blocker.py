@@ -4,6 +4,7 @@ import argparse
 import numpy as np
 import coco
 import utils
+import requests
 import model as modellib
 from classes import get_class_names, InferenceConfig
 from ast import literal_eval as make_tuple
@@ -65,17 +66,24 @@ def person_blocker(args):
     model.load_weights(COCO_MODEL_PATH, by_name=True)
 
     print("[INFO] starting video stream...")
-    vs = VideoStream(src=0).start()
-    time.sleep(2.0)
-    fps = FPS().start()
+    # vs = VideoStream(src=0).start()
+    # time.sleep(2.0)
+    # fps = FPS().start()
+    
+    url = f"http://140.193.201.45:8080/shot.jpg"
+
 
     while True:
-        frame = vs.read()
-        frame = imutils.resize(frame, width=400)
+        # frame = vs.read()
+        # frame = imutils.resize(frame, width=400)
         # image = imageio.imread(frame)
 
         # Create masks for all objects
-        results = model.detect([frame], verbose=0)
+        img_response = requests.get(url)
+        img_array = np.array(bytearray(img_response.content), dtype=np.uint8)
+        if img_array is not None:
+            img = cv2.imdecode(img_array, -1)
+        results = model.detect([img], verbose=0)
         r = results[0]
 
     # if args.labeled:
@@ -103,9 +111,9 @@ def person_blocker(args):
 
         # Replace object masks with noise
         # mask_color = string_to_rgb_triplet(args.color)
-        image_masked = frame.copy()
+        image_masked = img.copy()
         # noisy_color = create_noisy_color(image, mask_color)
-        noisy_color = create_noisy_color(frame, 0)
+        noisy_color = create_noisy_color(img, 0)
         image_masked[mask_selected > 0] = noisy_color[mask_selected > 0]
 
         
@@ -115,15 +123,15 @@ def person_blocker(args):
             break
 
         # update the FPS counter
-        fps.update()
+        # fps.update()
 
-    fps.stop()
-    print("[INFO] elapsed time: {:.2f}".format(fps.elapsed()))
-    print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
+    # fps.stop()
+    # print("[INFO] elapsed time: {:.2f}".format(fps.elapsed()))
+    # print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
 
     # do a bit of cleanup
-    cv2.destroyAllWindows()
-    vs.stop()
+    # cv2.destroyAllWindows()
+    # vs.stop()
     exit()
 
 if __name__ == '__main__':
