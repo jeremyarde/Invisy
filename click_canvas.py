@@ -1,7 +1,5 @@
 from tkinter import *
 
-from src.web_feed import WebFeed
-
 
 class MainWindow:
     def __init__(self):

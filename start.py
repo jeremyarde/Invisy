@@ -1,9 +1,6 @@
 import threading
-from multiprocessing.pool import ThreadPool
 
-from src.click_canvas import MainWindow
-from src.web_feed import WebFeed
-
+from click_canvas import MainWindow
 
 # wf = WebFeed()
 # wf.get_feed()
