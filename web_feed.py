@@ -16,9 +16,15 @@ url = f"http://140.193.201.45:8080/shot.jpg"
 
 
 class WebFeed:
-    def get_image(self):
+    @staticmethod
+    def get_image():
         img_response = requests.get(url)
-        return (StringIO(img_response.content))
+        img_array = np.array(bytearray(img_response.content), dtype=np.uint8)
+        if img_array is not None:
+            img = cv2.imdecode(img_array, -1)
+            return img
+
+
 
     @staticmethod
     def get_feed():
@@ -37,7 +43,8 @@ class WebFeed:
     def get_feed_single_image():
         img_response = requests.get(url)
         img_array = np.array(bytearray(img_response.content), dtype=np.uint8)
-        img = cv2.imdecode(img_array, -1)
+        img = Image.fromarray(img_response)
+        # img = cv2.imdecode(img_array, -1)
         return img
 
     @staticmethod
