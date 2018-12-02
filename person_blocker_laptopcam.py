@@ -66,19 +66,25 @@ def person_blocker(args):
     model.load_weights(COCO_MODEL_PATH, by_name=True)
 
     print("[INFO] starting video stream...")
-
-    url = f"http://jarde:invisy@140.193.201.45:8080/shot.jpg"
+    vs = VideoStream(src=0).start()
+    time.sleep(2.0)
+    fps = FPS().start()
 
 
     while True:
-
-        # Create masks for all objects
-        img_response = requests.get(url)
-        img_array = np.array(bytearray(img_response.content), dtype=np.uint8)
-        if img_array is not None:
-            img = cv2.imdecode(img_array, -1)
-        results = model.detect([img], verbose=0)
+        frame = vs.read()
+        frame = imutils.resize(frame, width=1000)
+        image = imageio.imread(frame)
+        results = model.detect([image], verbose=0)
         r = results[0]
+
+    # if args.labeled:
+        # position_ids = ['[{}]'.format(x)
+        #                 for x in range(r['class_ids'].shape[0])]
+        # visualize.display_instances(img, r['rois'],
+        #                             r['masks'], r['class_ids'],
+        #                             get_class_names(), position_ids)
+    #     sys.exit()
 
         # Filter masks to only the selected objects
         objects = np.array(args.objects)
@@ -109,6 +115,16 @@ def person_blocker(args):
         if key == ord("q"):
             break
 
+        update the FPS counter
+        fps.update()
+
+    fps.stop()
+    print("[INFO] elapsed time: {:.2f}".format(fps.elapsed()))
+    print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
+
+    do a bit of cleanup
+    cv2.destroyAllWindows()
+    vs.stop()
     exit()
 
 if __name__ == '__main__':
