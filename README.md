@@ -2,7 +2,7 @@
 Making people disappear since 2018.
 
 ## Demo
-The demo for running the model in the real-time.
+**This demo was filmed at The 2018 Local Hack Day at University of Manitoba, and this project helped us awarded an Honorable mention at the event**✌️
 ![](https://github.com/Jarde01/Invisy/blob/master/person_blocker.gif)
 
 ## Credit
